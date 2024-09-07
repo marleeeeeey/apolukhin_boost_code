@@ -1,6 +1,7 @@
 #include <boost/noncopyable.hpp>
 
-class connection: boost::noncopyable {
+class connection : boost::noncopyable
+{
 public:
     // Opening a connection is a slow operation
     void open();
@@ -10,7 +11,7 @@ public:
     // Other methods
     // ...
     int open_count_;
-    connection(): open_count_(0) {}
+    connection() : open_count_(0) {}
 };
 
 // In header file:
@@ -21,9 +22,11 @@ connection& get_connection();
 #include <cassert>
 boost::thread_specific_ptr<connection> connection_ptr;
 
-connection& get_connection() {
+connection& get_connection()
+{
     connection* p = connection_ptr.get();
-    if (!p) {
+    if (!p)
+    {
         connection_ptr.reset(new connection);
         p = connection_ptr.get();
         p->open();
@@ -32,8 +35,8 @@ connection& get_connection() {
     return *p;
 }
 
-
-void task() {
+void task()
+{
     int result = 2;
     // Some computations go there.
     // ...
@@ -42,22 +45,27 @@ void task() {
     get_connection().send_result(result);
 }
 
-void connection::open() {
+void connection::open()
+{
     assert(!open_count_);
     open_count_ = 1;
 }
 
-void connection::send_result(int /*result*/) {}
+void connection::send_result(int /*result*/)
+{}
 
-void run_tasks() {
-    for (std::size_t i = 0; i < 1000 /*0000*/; ++i) {
+void run_tasks()
+{
+    for (size_t i = 0; i < 1000 /*0000*/; ++i)
+    {
         task();
     }
 }
 
 #include <boost/thread/thread.hpp>
 
-int main() {
+int main()
+{
     boost::thread t1(&run_tasks);
     boost::thread t2(&run_tasks);
     boost::thread t3(&run_tasks);

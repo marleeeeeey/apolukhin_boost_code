@@ -3,10 +3,11 @@ void example2();
 
 #include <boost/variant.hpp>
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
-int main() {
+int main()
+{
     typedef boost::variant<int, const char*, std::string> my_var_t;
     std::vector<my_var_t> some_values;
     some_values.push_back(10);
@@ -21,13 +22,10 @@ int main() {
     example2();
 }
 
-
-
-void example1() {
+void example1()
+{
     // Default constructor constructs an instance of boost::blank.
-    boost::variant<
-        boost::blank, int, const char*, std::string
-    > var;
+    boost::variant<boost::blank, int, const char*, std::string> var;
 
     // 'which()' method returns an index of a type
     // currently held by variant.
@@ -37,9 +35,8 @@ void example1() {
     assert(var.which() != 0);
 }
 
-
-
-void example2() {
+void example2()
+{
     boost::variant<int, std::string> variable(0);
 
     // Following method may throw a boost::bad_get
@@ -48,7 +45,6 @@ void example2() {
 
     // If actual value in variable is not an int will return NULL.
     int* s2 = boost::get<int>(&variable);
-
 
     assert(s1 == 0);
     assert(s2);

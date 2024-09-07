@@ -1,37 +1,34 @@
-#include <string>
 #include <algorithm>
+#include <string>
 
-std::string between_str(const std::string& input, char starts, char ends) {
-    std::string::const_iterator pos_beg 
-        = std::find(input.begin(), input.end(), starts);
-    if (pos_beg == input.end()) {
+std::string between_str(const std::string& input, char starts, char ends)
+{
+    std::string::const_iterator pos_beg = std::find(input.begin(), input.end(), starts);
+    if (pos_beg == input.end())
+    {
         return std::string();
     }
-    ++ pos_beg;
+    ++pos_beg;
 
-    std::string::const_iterator pos_end 
-        = std::find(pos_beg, input.end(), ends);
+    std::string::const_iterator pos_end = std::find(pos_beg, input.end(), ends);
 
     return std::string(pos_beg, pos_end);
 }
 
 #include <boost/utility/string_view.hpp>
-boost::string_view between(
-    boost::string_view input,
-    char starts,
-    char ends)
+boost::string_view between(boost::string_view input, char starts, char ends)
 {
-    boost::string_view::const_iterator pos_beg 
-        = std::find(input.cbegin(), input.cend(), starts);
-    if (pos_beg == input.cend()) {
+    boost::string_view::const_iterator pos_beg = std::find(input.cbegin(), input.cend(), starts);
+    if (pos_beg == input.cend())
+    {
         return boost::string_view();
     }
-    ++ pos_beg;
+    ++pos_beg;
 
-    boost::string_view::const_iterator pos_end 
-        = std::find(pos_beg, input.cend(), ends);
+    boost::string_view::const_iterator pos_end = std::find(pos_beg, input.cend(), ends);
     // ...
-    if (pos_end == input.cend()) {
+    if (pos_end == input.cend())
+    {
         return boost::string_view(pos_beg, input.end() - pos_beg);
     }
 
@@ -39,7 +36,8 @@ boost::string_view between(
 }
 
 #include <vector>
-void string_view_init_examples() {
+void string_view_init_examples()
+{
     boost::string_view r0("^_^");
 
     std::string O_O("O__O");
@@ -56,10 +54,11 @@ void string_view_init_examples() {
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/lexical_cast.hpp>
-#include <iterator>
 #include <iostream>
+#include <iterator>
 
-void string_view_algorithms_examples() {
+void string_view_algorithms_examples()
+{
     boost::string_view r("O_O");
     // Finding single symbol.
     std::find(r.cbegin(), r.cend(), '_');
@@ -72,16 +71,15 @@ void string_view_algorithms_examples() {
     std::cout << r << '\n';
 
     // Will print '^_^'.
-    boost::replace_all_copy(
-        std::ostream_iterator<char>(std::cout), r, "O", "^"
-    );
+    boost::replace_all_copy(std::ostream_iterator<char>(std::cout), r, "O", "^");
     std::cout << '\n';
 
     r = "100";
     assert(boost::lexical_cast<int>(r) == 100);
 }
 
-int main() {
+int main()
+{
     std::cout << between("Getting expression (between brackets)", '(', ')') << '\n';
 
     std::string s("(expression)");

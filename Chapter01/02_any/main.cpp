@@ -1,9 +1,9 @@
-//#include <iostream>
-//#include <vector>
-//#include <string>
-//#include <auto_ptr.h>
+// #include <iostream>
+// #include <vector>
+// #include <string>
+// #include <auto_ptr.h>
 
-//int main()
+// int main()
 //{
 
 //    typedef std::auto_ptr<Object> object_ptr;
@@ -24,10 +24,11 @@ void example();
 
 #include <boost/any.hpp>
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
-int main() {
+int main()
+{
     std::vector<boost::any> some_values;
     some_values.push_back(10);
     const char* c_str = "Hello there!";
@@ -41,7 +42,8 @@ int main() {
     example();
 }
 
-void example() {
+void example()
+{
     boost::any variable(std::string("Hello world!"));
 
     // Following method may throw a boost::bad_any_cast exception
@@ -51,7 +53,6 @@ void example() {
     // Never throws. If actual value in variable is not a std::string
     // will return an NULL pointer.
     std::string* s2 = boost::any_cast<std::string>(&variable);
-
 
     (void)s2; // Supressing warnings about unused variable
     (void)s1;

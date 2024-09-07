@@ -1,20 +1,22 @@
 #include <boost/optional.hpp>
 #include <iostream>
 
-class locked_device {
-    explicit locked_device(const char* /*param*/) {
+class locked_device
+{
+    explicit locked_device(const char* /*param*/)
+    {
         // We have unique access to device.
         std::cout << "Device is locked\n";
     }
 
     static bool try_lock_device_impl();
 public:
-    void use() {
-        std::cout << "Success!\n";
-    }
+    void use() { std::cout << "Success!\n"; }
 
-    static boost::optional<locked_device> try_lock_device() {
-        if (!try_lock_device_impl()) {
+    static boost::optional<locked_device> try_lock_device()
+    {
+        if (!try_lock_device_impl())
+        {
             // Failed to lock device.
             return boost::none;
         }
@@ -26,15 +28,19 @@ public:
     ~locked_device(); // Releases device lock.
 };
 
-int main() {
-    for (unsigned i = 0; i < 10; ++i) {
-        boost::optional<locked_device> t
-            = locked_device::try_lock_device();
+int main()
+{
+    for (unsigned i = 0; i < 10; ++i)
+    {
+        boost::optional<locked_device> t = locked_device::try_lock_device();
         // optional is convertible to bool
-        if (t) {
+        if (t)
+        {
             t->use();
             return 0;
-        } else {
+        }
+        else
+        {
             std::cout << "...trying again\n";
         }
     }
@@ -45,9 +51,11 @@ int main() {
 
 // details:
 
-locked_device::~locked_device(){}
+locked_device::~locked_device()
+{}
 
-bool locked_device::try_lock_device_impl() {
+bool locked_device::try_lock_device_impl()
+{
     static int i = 0;
     ++i;
     return i == 3;

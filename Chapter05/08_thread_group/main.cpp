@@ -1,12 +1,11 @@
 void do_assert(int threads_joined);
 
-
-
 #include <boost/thread.hpp>
 
 void some_function();
 
-void sample() {
+void sample()
+{
     boost::thread t1(&some_function);
     boost::thread t2(&some_function);
     boost::thread t3(&some_function);
@@ -17,15 +16,15 @@ void sample() {
     t3.join();
 }
 
-
-
 #include <boost/thread.hpp>
 
-int main() {
+int main()
+{
     boost::thread_group threads;
 
     // Launching 10 threads.
-    for (unsigned i = 0; i < 10; ++i) {
+    for (unsigned i = 0; i < 10; ++i)
+    {
         threads.create_thread(&some_function);
     }
 
@@ -40,16 +39,17 @@ int main() {
     do_assert(13);
 }
 
-
 // details:
 
 #include <boost/atomic.hpp>
 boost::atomic_int g_counter(0);
 
-void do_assert(int threads_joined) {
+void do_assert(int threads_joined)
+{
     assert(g_counter == threads_joined);
 }
 
-void some_function() {
+void some_function()
+{
     ++g_counter;
 }

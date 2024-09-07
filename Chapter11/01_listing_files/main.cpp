@@ -1,41 +1,46 @@
 #include <boost/filesystem/operations.hpp>
 #include <iostream>
 
-int main() {
+int main()
+{
     boost::filesystem::directory_iterator begin("./");
     boost::filesystem::directory_iterator end;
 
-    for (; begin != end; ++ begin) {
+    for (; begin != end; ++begin)
+    {
         /*
         boost::filesystem::file_status fs =
             boost::filesystem::status(*begin);
         */
 
-        boost::filesystem::file_status fs = 
-            begin->status();
+        boost::filesystem::file_status fs = begin->status();
 
-        switch (fs.type()) {
+        switch (fs.type())
+        {
         case boost::filesystem::regular_file:
-            std::cout << "FILE       "; 
+            std::cout << "FILE       ";
             break;
         case boost::filesystem::symlink_file:
-            std::cout << "SYMLINK    "; 
+            std::cout << "SYMLINK    ";
             break;
         case boost::filesystem::directory_file:
-            std::cout << "DIRECTORY  "; 
+            std::cout << "DIRECTORY  ";
             break;
         default:
-            std::cout << "OTHER      "; 
+            std::cout << "OTHER      ";
             break;
         }
 
-        if (fs.permissions() & boost::filesystem::owner_write) {
+        if (fs.permissions() & boost::filesystem::owner_write)
+        {
             std::cout << "W ";
-        } else {
+        }
+        else
+        {
             std::cout << "  ";
         }
 
         std::cout << begin->path() << '\n';
-        //std::cout << *begin << '\n';
+        // std::cout << *begin << '\n';
     } /*for*/
 } /*main*/

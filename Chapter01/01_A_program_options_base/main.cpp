@@ -3,7 +3,7 @@
 
 namespace opt = boost::program_options;
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     // Constructing an options describing variable and giving it a
     // textual description "All options".
@@ -13,11 +13,8 @@ int main(int argc, char *argv[])
     // to be used in command line. Second parameter is a type
     // of that option, wrapped in value<> class. Third parameter
     // must be a short description of that option.
-    desc.add_options()
-        ("apples", opt::value<int>(), "how many apples do you have")
-        ("oranges", opt::value<int>(), "how many oranges do you have")
-        ("help", "produce help message")
-    ;
+    desc.add_options()("apples", opt::value<int>(), "how many apples do you have")(
+        "oranges", opt::value<int>(), "how many oranges do you have")("help", "produce help message");
 
     // Variable to store our command line arguments.
     opt::variables_map vm;
@@ -28,14 +25,24 @@ int main(int argc, char *argv[])
     // Must be called after all the parsing and storing.
     opt::notify(vm);
 
-    if (vm.count("help")) {
+    if (vm.count("help"))
+    {
         std::cout << desc << "\n";
         return 1;
     }
 
-    std::cout << "Fruits count: "
-        << vm["apples"].as<int>() + vm["oranges"].as<int>()
-        << std::endl;
+    if (!vm.count("apples"))
+    {
+        std::cout << "You have to specify apples count" << std::endl;
+        return 1;
+    }
+
+    if (!vm.count("oranges"))
+    {
+        std::cout << "You have to specify oranges count" << std::endl;
+        return 1;
+    }
+
+    std::cout << "Fruits count: " << vm["apples"].as<int>() + vm["oranges"].as<int>() << std::endl;
 
 } // end of `main`
-

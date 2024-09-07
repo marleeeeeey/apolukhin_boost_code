@@ -1,12 +1,22 @@
-struct data_packet { unsigned int value; };
-struct decoded_data { unsigned int value; };
-struct compressed_data { unsigned int value; };
+struct data_packet
+{
+    unsigned int value;
+};
+struct decoded_data
+{
+    unsigned int value;
+};
+struct compressed_data
+{
+    unsigned int value;
+};
 
 #include <boost/atomic.hpp>
 #include <boost/noncopyable.hpp>
 typedef boost::atomic<unsigned int> atomic_t;
 
-class subsystem1: boost::noncopyable {
+class subsystem1 : boost::noncopyable
+{
     atomic_t i_;
 public:
     subsystem1();
@@ -18,7 +28,8 @@ public:
     bool is_stopped() const;
 };
 
-class subsystem2: boost::noncopyable {
+class subsystem2 : boost::noncopyable
+{
     atomic_t i_;
 public:
     subsystem2();
@@ -26,7 +37,6 @@ public:
     void send_data(const compressed_data& data);
     unsigned int send_packets_count() const;
 };
-
 
 #include <boost/thread/thread.hpp>
 
@@ -36,8 +46,10 @@ subsystem2 subs2;
 decoded_data decode_data(const data_packet& packet);
 compressed_data compress_data(const decoded_data& packet);
 
-void process_data() {
-    while (!subs1.is_stopped()) {
+void process_data()
+{
+    while (!subs1.is_stopped())
+    {
         data_packet data = subs1.get_data();
         decoded_data d_decoded = decode_data(data);
         compressed_data c_data = compress_data(d_decoded);
@@ -45,7 +57,8 @@ void process_data() {
     }
 }
 
-void run_in_multiple_threads() {
+void run_in_multiple_threads()
+{
     boost::thread t(&process_data);
     process_data();
 
@@ -55,30 +68,27 @@ void run_in_multiple_threads() {
 //////////////
 
 // class work_queue from chapter 5
-#include <deque>
 #include <boost/function.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/locks.hpp>
 #include <boost/thread/condition_variable.hpp>
+#include <boost/thread/locks.hpp>
+#include <boost/thread/mutex.hpp>
+#include <deque>
 
-class work_queue {
+class work_queue
+{
 public:
     typedef boost::function<void()> task_type;
-
 private:
-    std::deque<task_type>       tasks_;
-    boost::mutex                mutex_;
-    boost::condition_variable   cond_;
-    bool                        is_stopped_;
-
+    std::deque<task_type> tasks_;
+    boost::mutex mutex_;
+    boost::condition_variable cond_;
+    bool is_stopped_;
 public:
-    work_queue()
-        : is_stopped_(false)
-    {}
+    work_queue() : is_stopped_(false) {}
 
     void run();
     void stop();
-    
+
     // Same as in Chapter 5, but with
     // rvalue references support.
     void push_task(task_type&& task);
@@ -93,50 +103,36 @@ void start_data_accepting();
 void do_decode(const data_packet& packet);
 void do_compress(const decoded_data& packet);
 
-void start_data_accepting() {
-    while (!subs1.is_stopped()) {
+void start_data_accepting()
+{
+    while (!subs1.is_stopped())
+    {
         data_packet packet = subs1.get_data();
 
-        decoding_queue.push_task(
-            [packet]() {
-                do_decode(packet);
-            }
-        );
+        decoding_queue.push_task([packet]() { do_decode(packet); });
     }
 }
 
-void do_decode(const data_packet& packet) {
+void do_decode(const data_packet& packet)
+{
     decoded_data d_decoded = decode_data(packet);
 
-    compressing_queue.push_task(
-        [d_decoded]() {
-            do_compress(d_decoded);
-        }
-    );
+    compressing_queue.push_task([d_decoded]() { do_compress(d_decoded); });
 }
 
-void do_compress(const decoded_data& packet) {
+void do_compress(const decoded_data& packet)
+{
     compressed_data c_data = compress_data(packet);
-        
-    sending_queue.push_task(
-        [c_data]() {
-            subs2.send_data(c_data);
-        }
-    );
-}
 
+    sending_queue.push_task([c_data]() { subs2.send_data(c_data); });
+}
 
 #include <boost/thread/thread.hpp>
-int main() {
-    boost::thread t_data_decoding(
-        []() { decoding_queue.run(); }
-    );
-    boost::thread t_data_compressing(
-        []() { compressing_queue.run(); }
-    );
-    boost::thread t_data_sending(
-        []() { sending_queue.run(); }
-    );
+int main()
+{
+    boost::thread t_data_decoding([]() { decoding_queue.run(); });
+    boost::thread t_data_compressing([]() { compressing_queue.run(); });
+    boost::thread t_data_sending([]() { sending_queue.run(); });
 
     start_data_accepting();
 
@@ -151,23 +147,25 @@ int main() {
 
     assert(subs2.send_packets_count() == subsystem1::max_runs);
 
-
-
     run_in_multiple_threads(); // Making coverage tools happy.
 }
 
-
-void work_queue::stop() {
+void work_queue::stop()
+{
     boost::lock_guard<boost::mutex> lock(mutex_);
     is_stopped_ = true;
     cond_.notify_all();
 }
 
-void work_queue::run() {
-    while (1) {
+void work_queue::run()
+{
+    while (1)
+    {
         boost::unique_lock<boost::mutex> lock(mutex_);
-        while (tasks_.empty()) {
-            if (is_stopped_) {
+        while (tasks_.empty())
+        {
+            if (is_stopped_)
+            {
                 return;
             }
             cond_.wait(lock);
@@ -181,11 +179,11 @@ void work_queue::run() {
     }
 }
 
-
-
-void work_queue::push_task(task_type&& task) {
+void work_queue::push_task(task_type&& task)
+{
     boost::unique_lock<boost::mutex> lock(mutex_);
-    if (is_stopped_) {
+    if (is_stopped_)
+    {
         return;
     }
     tasks_.push_back(std::move(task));
@@ -193,48 +191,50 @@ void work_queue::push_task(task_type&& task) {
     cond_.notify_one();
 }
 
-subsystem1::subsystem1()
-    : i_(0)
+subsystem1::subsystem1() : i_(0)
 {}
 
-data_packet subsystem1::get_data() {
-    data_packet ret = { ++ i_ };
+data_packet subsystem1::get_data()
+{
+    data_packet ret = {++i_};
     return ret;
 }
 
-  
-bool subsystem1::is_stopped() const {
+bool subsystem1::is_stopped() const
+{
     return i_ == max_runs; // 10 000 runs
 }
 
 #include <cassert>
 
-subsystem2::subsystem2()
-    : i_(0)
+subsystem2::subsystem2() : i_(0)
 {}
 
-void subsystem2::send_data(const compressed_data& data) {
-    ++ i_;
+void subsystem2::send_data(const compressed_data& data)
+{
+    ++i_;
     assert(data.value == i_);
 }
 
-unsigned int subsystem2::send_packets_count() const {
+unsigned int subsystem2::send_packets_count() const
+{
     return i_;
 }
 
-decoded_data decode_data(const data_packet& packet) {
+decoded_data decode_data(const data_packet& packet)
+{
     static unsigned int i = 0;
-    ++ i;
-    decoded_data ret = { packet.value };
+    ++i;
+    decoded_data ret = {packet.value};
     assert(i == packet.value);
     return ret;
 }
 
-compressed_data compress_data(const decoded_data& packet) {
+compressed_data compress_data(const decoded_data& packet)
+{
     static unsigned int i = 0;
-    ++ i;
-    compressed_data ret = { packet.value };
+    ++i;
+    compressed_data ret = {packet.value};
     assert(i == packet.value);
     return ret;
 }
-

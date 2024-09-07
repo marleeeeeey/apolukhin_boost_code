@@ -5,17 +5,20 @@ bool not_end_of_parsing = true;
 
 void do_parse();
 
-int main() {
+int main()
+{
     boost::thread parser_thread(&do_parse);
 
     // ...
 
-    if (stop_parsing) {
+    if (stop_parsing)
+    {
         // No more parsing required.
         // TODO: Stop the parser!
     }
 
-    if (stop_parsing) {
+    if (stop_parsing)
+    {
         // No more parsing required.
         parser_thread.interrupt();
     }
@@ -23,8 +26,10 @@ int main() {
     parser_thread.join();
 }
 
-void do_parse() {
-    while (not_end_of_parsing) {
+void do_parse()
+{
+    while (not_end_of_parsing)
+    {
         // If current thread was interrupted, the following
         // line will throw an boost::thread_interrupted.
         boost::this_thread::interruption_point();
@@ -36,4 +41,3 @@ void do_parse() {
     // Newer shall reach this code
     assert(false);
 }
-

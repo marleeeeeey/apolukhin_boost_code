@@ -1,12 +1,14 @@
-#include <vector>
 #include <boost/thread/mutex.hpp>
+#include <vector>
 
 typedef int item_t;
 
-namespace first_attempt {
+namespace first_attempt
+{
 
-class user {
-    boost::mutex        loot_mutex_;
+class user
+{
+    boost::mutex loot_mutex_;
     std::vector<item_t> loot_;
 public:
     // ...
@@ -16,22 +18,23 @@ public:
 
 } // namespace first_attempt
 
-#include <boost/thread/mutex.hpp>
 #include <boost/thread/locks.hpp>
+#include <boost/thread/mutex.hpp>
 
-void first_attempt::user::exchange_loot(user& u) {
+void first_attempt::user::exchange_loot(user& u)
+{
     // Terribly wrong!!! ABBA deadlocks.
     boost::lock_guard<boost::mutex> l0(loot_mutex_);
     boost::lock_guard<boost::mutex> l1(u.loot_mutex_);
     loot_.swap(u.loot_);
 }
 
+namespace second_attempt
+{
 
-
-namespace second_attempt {
-
-class user {
-    boost::mutex        loot_mutex_;
+class user
+{
+    boost::mutex loot_mutex_;
     std::vector<item_t> loot_;
 public:
     // ...
@@ -44,27 +47,25 @@ public:
 #ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
 
 #include <boost/thread/lock_factories.hpp>
-void second_attempt::user::exchange_loot(user& u) {
+void second_attempt::user::exchange_loot(user& u)
+{
     typedef boost::unique_lock<boost::mutex> lock_t;
 
-    std::tuple<lock_t, lock_t> l = boost::make_unique_locks(
-        loot_mutex_, u.loot_mutex_
-    );
+    std::tuple<lock_t, lock_t> l = boost::make_unique_locks(loot_mutex_, u.loot_mutex_);
 
     loot_.swap(u.loot_);
 }
 
-
 #endif // #ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
-
-
 
 #ifdef __cpp_lib_scoped_lock
 #include <mutex>
-namespace cpp17_attempt {
+namespace cpp17_attempt
+{
 
-class user {
-    std::mutex        loot_mutex_;
+class user
+{
+    std::mutex loot_mutex_;
     std::vector<item_t> loot_;
 public:
     // ...
@@ -74,19 +75,20 @@ public:
 
 } // namespace cpp17_attempt
 
-void cpp17_attempt::user::exchange_loot(user& u) {
+void cpp17_attempt::user::exchange_loot(user& u)
+{
     std::scoped_lock l(loot_mutex_, u.loot_mutex_);
     loot_.swap(u.loot_);
 }
 
 #endif // __cpp_lib_scoped_lock
 
+namespace portable_attempt
+{
 
-
-namespace portable_attempt {
-
-class user {
-    boost::mutex        loot_mutex_;
+class user
+{
+    boost::mutex loot_mutex_;
     std::vector<item_t> loot_;
 public:
     // ...
@@ -96,7 +98,8 @@ public:
 
 #include <boost/thread/locks.hpp>
 
-void user::exchange_loot(user& u) {
+void user::exchange_loot(user& u)
+{
     typedef boost::unique_lock<boost::mutex> lock_t;
 
     lock_t l0(loot_mutex_, boost::defer_lock);
@@ -106,20 +109,19 @@ void user::exchange_loot(user& u) {
     loot_.swap(u.loot_);
 }
 
-} // namespace last_attempt
-
-
+} // namespace portable_attempt
 
 template <class UserType>
-void do_test() {
+void do_test()
+{
     UserType u1;
     UserType u2;
 
     u1.exchange_loot(u2);
 }
 
-
-int main() {
+int main()
+{
     do_test<first_attempt::user>(); // Intentionally has ABBA deadlock!
 
 #ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES

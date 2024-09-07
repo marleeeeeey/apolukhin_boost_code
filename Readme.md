@@ -10,6 +10,7 @@ This repository contains all the code examples from the
 [![Build Status](https://travis-ci.org/apolukhin/Boost-Cookbook.svg?branch=second_edition)](https://travis-ci.org/apolukhin/Boost-Cookbook) [![Build status](https://ci.appveyor.com/api/projects/status/github/apolukhin/boost-cookbook?branch=second_edition&svg=true)](https://ci.appveyor.com/project/apolukhin/boost-cookbook/branch/second_edition) [![Coverage Status](https://coveralls.io/repos/github/apolukhin/Boost-Cookbook/badge.svg?branch=second_edition)](https://coveralls.io/github/apolukhin/Boost-Cookbook?branch=second_edition) [![codecov.io](https://codecov.io/github/apolukhin/Boost-Cookbook/coverage.svg?branch=second_edition)](https://codecov.io/github/apolukhin/Boost-Cookbook?branch=second_edition)
 
 ### Content
+
 This repository contatins project files for QtCreator IDE. `BoostBook.pro` - is the main project file.
 See config.txt file for setupping platform specific flags.
 
@@ -19,8 +20,8 @@ compilation by just opening the '.pro' file with any text editor.
 All source code is distributed under the Boost Software License, Version 1.0.
 (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-
 ### Coding style
+
 Some of the C++ coding styles are broken to fit better cookbook educational format:
 
 * Headers are not always included in the beginning of source and header files.
@@ -41,13 +42,13 @@ middle of 'How to do it' part and see a working part of code that does not
 require searching all around the chapter for an answer 'In what namespace is
 this class defined?'.
 
-
-
 ### Thanks
+
 Thanks to Heather Gopsill from Packt Publishing for giving a permission to make sources publicly available.
 Thanks to Nitin Dasan from Packt Publishing for getting all the necessary approvals for making sources publicly available for the second edition of the book.
 
 ### Notes for book update
+
 For year 2022+ :
 * Separate chapters on Graphs/Testing/Image processinggit
 * Remove description of all the Boost libraries that were added into C++11 (including Boost.Move)
@@ -63,7 +64,3 @@ For year 2022+ :
 alignment between them").
 * Add an example on stateful allocators in Boost.
 * Add an example on Boost.PolyCollection.
-
-
-
-

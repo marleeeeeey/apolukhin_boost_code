@@ -8,20 +8,18 @@ typedef void (*func_t)(int);
 void process_integers(func_t f);
 
 // Functional object
-class int_processor {
-   const int min_;
-   const int max_;
-   bool& triggered_;
-
+class int_processor
+{
+    const int min_;
+    const int max_;
+    bool& triggered_;
 public:
-    int_processor(int min, int max, bool& triggered)
-        : min_(min)
-        , max_(max)
-        , triggered_(triggered)
-    {}
+    int_processor(int min, int max, bool& triggered) : min_(min), max_(max), triggered_(triggered) {}
 
-    void operator()(int i) const {
-        if (i < min_ || i > max_) {
+    void operator()(int i) const
+    {
+        if (i < min_ || i > max_)
+        {
             triggered_ = true;
         }
     }
@@ -33,7 +31,8 @@ typedef boost::function<void(int)> fobject_t;
 // Now this function may accept functional objects
 void process_integers(const fobject_t& f);
 
-int main() {
+int main()
+{
     bool is_triggered = false;
     int_processor fo(0, 200, is_triggered);
     process_integers(fo);
@@ -41,9 +40,10 @@ int main() {
 }
 
 bool g_is_triggered = false;
-void set_functional_object(fobject_t& f) {
+void set_functional_object(fobject_t& f)
+{
     // Local variable
-    int_processor fo( 100, 200, g_is_triggered);
+    int_processor fo(100, 200, g_is_triggered);
 
     f = fo;
     // now 'f' holds a copy of 'fo'
@@ -52,27 +52,32 @@ void set_functional_object(fobject_t& f) {
     // but it's OK to use 'f' in outer scope.
 }
 
-
-void foo(const fobject_t& f) {
+void foo(const fobject_t& f)
+{
     // boost::function is convertible to bool
-    if (f) {
+    if (f)
+    {
         // we have value in 'f'
         // ...
-    } else {
+    }
+    else
+    {
         // 'f' is empty
         // ...
     }
 }
 
-void process_integers(const fobject_t& f) {
+void process_integers(const fobject_t& f)
+{
     static const int data[] = {1, 2, 3, 4, 5, 250};
     std::for_each(data, data + sizeof(data) / sizeof(int), f);
 }
 
-
 // Making sure that `set_functional_object` works as expected
-struct more_tests_runner {
-    more_tests_runner() {
+struct more_tests_runner
+{
+    more_tests_runner()
+    {
         fobject_t out;
         assert(!out);
         set_functional_object(out);

@@ -2,12 +2,14 @@
 #include <iostream>
 
 template <int I>
-struct printer {
+struct printer
+{
     printer() { std::cout << I; }
 };
 
-int main() {
+int main()
+{
     // Outputs 012
-    boost::tuple<printer<0>, printer<1>, printer<2> > t;
+    boost::tuple<printer<0>, printer<1>, printer<2>> t;
     (void)t;
 }

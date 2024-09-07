@@ -1,9 +1,9 @@
 #include <boost/config.hpp>
 
 #if defined(BOOST_MSVC) || defined(__MINGW32__)
-    // Workarounds for https://svn.boost.org/trac10/ticket/13135
-    // and https://github.com/boostorg/filesystem/issues/168
-#   define NDEBUG 1
+// Workarounds for https://svn.boost.org/trac10/ticket/13135
+// and https://github.com/boostorg/filesystem/issues/168
+#define NDEBUG 1
 #endif
 
 #include <boost/filesystem/operations.hpp>
@@ -11,7 +11,8 @@
 #include <fstream>
 #include <iostream>
 
-int main() {
+int main()
+{
     boost::system::error_code error;
 
     boost::filesystem::create_directories("dir/subdir", error);
@@ -22,13 +23,15 @@ int main() {
     assert(ofs);
     ofs.close();
 
-    boost::filesystem::create_symlink(
-        "dir/subdir/file.txt", "symlink", error);
+    boost::filesystem::create_symlink("dir/subdir/file.txt", "symlink", error);
 
-    if (!error) {
+    if (!error)
+    {
         std::cerr << "Symlink created\n";
         assert(boost::filesystem::exists("symlink"));
-    } else {
+    }
+    else
+    {
         std::cerr << "Failed to create a symlink\n";
 
         boost::filesystem::remove_all("dir", error);

@@ -8,29 +8,35 @@
 // Following header includes only boost::thread.
 #include <boost/thread/thread.hpp>
 
-namespace without_sync {
+namespace without_sync
+{
 
 int shared_i = 0;
 
-void do_inc() {
-    for (std::size_t i = 0; i < 30000; ++i) {
+void do_inc()
+{
+    for (std::size_t i = 0; i < 30000; ++i)
+    {
         const int i_snapshot = ++shared_i;
         // Do some work with i_snapshot.
         // ...
-        (void) i_snapshot;
+        (void)i_snapshot;
     }
 }
 
-void do_dec() {
-    for (std::size_t i = 0; i < 30000; ++i) {
+void do_dec()
+{
+    for (std::size_t i = 0; i < 30000; ++i)
+    {
         const int i_snapshot = --shared_i;
         // Do some work with i_snapshot.
         // ...
-        (void) i_snapshot;
+        (void)i_snapshot;
     }
 }
 
-void run() {
+void run()
+{
     boost::thread t1(&do_inc);
     boost::thread t2(&do_dec);
 
@@ -43,21 +49,24 @@ void run() {
 
 } // namespace without_sync
 
-#include <boost/thread/mutex.hpp>
 #include <boost/thread/locks.hpp>
+#include <boost/thread/mutex.hpp>
 
-namespace with_sync {
+namespace with_sync
+{
 
 int shared_i = 0;
 boost::mutex i_mutex;
 
-void do_inc() {
-    for (std::size_t i = 0; i < 30000; ++i) {
+void do_inc()
+{
+    for (std::size_t i = 0; i < 30000; ++i)
+    {
         int i_snapshot;
-        {   // Critical section begin.
+        { // Critical section begin.
             boost::lock_guard<boost::mutex> lock(i_mutex);
             i_snapshot = ++shared_i;
-        }   // Critical section end.
+        } // Critical section end.
 
         // Do some work with i_snapshot.
         // ...
@@ -65,21 +74,24 @@ void do_inc() {
     }
 }
 
-void do_dec() {
-    for (std::size_t i = 0; i < 30000; ++i) {
+void do_dec()
+{
+    for (std::size_t i = 0; i < 30000; ++i)
+    {
         int i_snapshot;
-        {   // Critical section begin.
+        { // Critical section begin.
             boost::lock_guard<boost::mutex> lock(i_mutex);
-            i_snapshot = -- shared_i;
-        }   // Critical section end.
+            i_snapshot = --shared_i;
+        } // Critical section end.
 
         // Do some work with i_snapshot.
         // ...
-        (void) i_snapshot;
+        (void)i_snapshot;
     }
 }
 
-void run() {
+void run()
+{
     boost::thread t1(&do_inc);
     boost::thread t2(&do_dec);
 
@@ -90,11 +102,12 @@ void run() {
     std::cout << "shared_i == " << shared_i;
 }
 
-} // namespace without_sync
+} // namespace with_sync
 
 #include <boost/thread/recursive_mutex.hpp>
 
-int main() {
+int main()
+{
     without_sync::run();
     std::cout << '\n';
     with_sync::run();

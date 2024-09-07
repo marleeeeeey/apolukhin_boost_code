@@ -1,11 +1,15 @@
 #include "../06_A_my_library/my_library.hpp"
 #include <cassert>
 
-int main() {
+int main()
+{
     assert(foo() == 0);
     bar b;
-    try {
+    try
+    {
         b.meow();
         assert(false);
-    } catch (const bar_exception&) {}
+    }
+    catch (const bar_exception&)
+    {}
 }

@@ -2,7 +2,8 @@
 #define BOOST_BOOK_CHAPTER12_FOO_HPP
 
 #include <stdexcept>
-struct foo {
+struct foo
+{
     int val_;
 
     operator int() const;

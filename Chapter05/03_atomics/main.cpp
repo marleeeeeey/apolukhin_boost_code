@@ -2,33 +2,37 @@
 #include <cstddef>
 #include <iostream>
 
-#include <boost/thread/thread.hpp>
 #include <boost/atomic.hpp>
+#include <boost/thread/thread.hpp>
 
 boost::atomic<int> shared_i(0);
 
-void do_inc() {
-    for (std::size_t i = 0; i < 30000; ++i) {
-        const int i_snapshot = ++ shared_i;
+void do_inc()
+{
+    for (std::size_t i = 0; i < 30000; ++i)
+    {
+        const int i_snapshot = ++shared_i;
 
         // Do some work with i_snapshot.
         // ...
-        (void) i_snapshot;
+        (void)i_snapshot;
     }
 }
 
-void do_dec() {
-    for (std::size_t i = 0; i < 30000; ++i) {
-        const int i_snapshot = -- shared_i;
+void do_dec()
+{
+    for (std::size_t i = 0; i < 30000; ++i)
+    {
+        const int i_snapshot = --shared_i;
 
         // Do some work with i_snapshot.
         // ...
-        (void) i_snapshot;
+        (void)i_snapshot;
     }
 }
 
-
-int main() {
+int main()
+{
     boost::thread t1(&do_inc);
     boost::thread t2(&do_dec);
 

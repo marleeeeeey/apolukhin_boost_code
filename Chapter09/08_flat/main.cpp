@@ -1,12 +1,14 @@
-#include <boost/container/flat_set.hpp>
 #include <algorithm>
+#include <boost/container/flat_set.hpp>
 #include <cassert>
 
-int main() {
+int main()
+{
     boost::container::flat_set<int> set;
     set.reserve(4096);
 
-    for (int i = 0; i < 4000; ++i) {
+    for (int i = 0; i < 4000; ++i)
+    {
         set.insert(i);
     }
 
@@ -23,10 +25,5 @@ int main() {
     assert(std::lower_bound(set.cbegin(), set.cend(), 900000) == set.cend());
 
     // 5.5
-    assert(
-        set.lower_bound(100) + 400 
-        == 
-        set.find(500)
-    );
+    assert(set.lower_bound(100) + 400 == set.find(500));
 } // end of main() function
-

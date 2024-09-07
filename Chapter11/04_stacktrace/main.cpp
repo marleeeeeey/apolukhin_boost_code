@@ -1,7 +1,8 @@
-#include <iostream>
 #include <boost/stacktrace.hpp>
+#include <iostream>
 
-void report_bankruptcy() {
+void report_bankruptcy()
+{
     std::cout << "Sorry, you're bankrupt!\n";
     std::cout << "Here's how it happened:\n" << boost::stacktrace::stacktrace();
     std::exit(0);
@@ -9,7 +10,8 @@ void report_bankruptcy() {
 
 BOOST_NOINLINE void start_trading(int money);
 
-int main() {
+int main()
+{
     int money = 1000;
     start_trading(money);
 }
@@ -25,18 +27,20 @@ BOOST_NOINLINE void make_a_bet(int money);
 BOOST_FORCEINLINE int party(int money);
 BOOST_NOINLINE void win(int money);
 
-
-
-BOOST_NOINLINE void loose(int money) {
-    if (money < 10) {
+BOOST_NOINLINE void loose(int money)
+{
+    if (money < 10)
+    {
         report_bankruptcy();
     }
     make_a_bet(money);
 }
 
-BOOST_NOINLINE int go_to_casino(int money) {
+BOOST_NOINLINE int go_to_casino(int money)
+{
     static bool i = true;
-    if (i) {
+    if (i)
+    {
         // First time in casin0 :)
         i = false;
         win(money * 2);
@@ -46,14 +50,17 @@ BOOST_NOINLINE int go_to_casino(int money) {
     return party(money);
 }
 
-BOOST_NOINLINE int go_to_bar(int money) {
+BOOST_NOINLINE int go_to_bar(int money)
+{
     money -= 11; // 1 beer please ...
     money -= 11 * 20; // ... and 1 beer to everyone in the room!
     return party(money);
 }
 
-BOOST_FORCEINLINE int party(int money) {
-    if (money > 0) {
+BOOST_FORCEINLINE int party(int money)
+{
+    if (money > 0)
+    {
         return money & 1 ? go_to_casino(money) : go_to_bar(money);
     }
 
@@ -61,22 +68,28 @@ BOOST_FORCEINLINE int party(int money) {
     return 0;
 }
 
-BOOST_NOINLINE void win(int money) {
+BOOST_NOINLINE void win(int money)
+{
     money = party(money);
     make_a_bet(money);
 }
 
-BOOST_NOINLINE void make_a_bet(int money) {
+BOOST_NOINLINE void make_a_bet(int money)
+{
     static int i = 3;
-    -- i;
-    if (!i) {
+    --i;
+    if (!i)
+    {
         i = 3;
         win(money * 100500);
-    } else {
+    }
+    else
+    {
         loose(money * 0.9);
     }
 }
 
-BOOST_NOINLINE void start_trading(int money) {
+BOOST_NOINLINE void start_trading(int money)
+{
     make_a_bet(money);
 }

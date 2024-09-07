@@ -1,9 +1,6 @@
-//#include <something_that_defines_macros>
+// #include <something_that_defines_macros>
 
-#if !defined(__clang__) \
-    && !defined(__ICC) \
-    && !defined(__INTEL_COMPILER) \
-    && (defined(__GNUC__) || defined(__GNUG__))
+#if !defined(__clang__) && !defined(__ICC) && !defined(__INTEL_COMPILER) && (defined(__GNUC__) || defined(__GNUG__))
 
 // GCC specific
 
@@ -17,9 +14,8 @@
 
 #endif
 
-
-#include <boost/predef/os.h>
 #include <boost/predef/compiler.h>
+#include <boost/predef/os.h>
 
 #if BOOST_COMP_GNUC && BOOST_OS_LINUX && !BOOST_OS_ANDROID
 
@@ -27,4 +23,5 @@
 
 #endif
 
-int main() {}
+int main()
+{}

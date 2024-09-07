@@ -1,18 +1,20 @@
-class descriptor_owner {
-    void* descriptor_;
-
+class descriptor_owner
+{
+    [[maybe_unused]] void* descriptor_;
 public:
     explicit descriptor_owner(const char* params);
 
-    ~descriptor_owner() {
+    ~descriptor_owner()
+    {
         // system_api_free_descriptor(descriptor_);
     }
 };
 
-descriptor_owner::descriptor_owner(const char* ){}
+descriptor_owner::descriptor_owner(const char*)
+{}
 
-
-void i_am_bad() {
+void i_am_bad()
+{
     descriptor_owner d1("O_o");
     descriptor_owner d2("^_^");
 
@@ -25,24 +27,25 @@ void i_am_bad() {
 
 #include <boost/noncopyable.hpp>
 
-class descriptor_owner_fixed : private boost::noncopyable {
+class descriptor_owner_fixed : private boost::noncopyable
+{
     // ...
 public:
-    descriptor_owner_fixed(const char* params){ (void)params; }
+    descriptor_owner_fixed(const char* params) { (void)params; }
 };
 
-void i_am_good() {
+void i_am_good()
+{
     descriptor_owner_fixed d1("O_o");
     descriptor_owner_fixed d2("^_^");
 
     // Won't compile
-    //d2 = d1;
-    //descriptor_owner_fixed d3(d1);
+    // d2 = d1;
+    // descriptor_owner_fixed d3(d1);
 }
 
-
-int main() {
+int main()
+{
     i_am_bad();
     i_am_good();
 }
-

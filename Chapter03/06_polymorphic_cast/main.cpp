@@ -1,26 +1,32 @@
 #include <boost/cast.hpp>
 
-struct object {
+struct object
+{
     virtual ~object() {}
 };
 
-struct banana: public object {
+struct banana : public object
+{
     void eat() const {}
-    virtual ~banana(){}
+    virtual ~banana() {}
 };
 
-struct penguin: public object {
-    bool try_to_fly() const {
+struct penguin : public object
+{
+    bool try_to_fly() const
+    {
         return false; // penguins do not fly
     }
-    virtual ~penguin(){}
+    virtual ~penguin() {}
 };
 
 object* try_produce_banana();
 
-void try_eat_banana_impl1() {
+void try_eat_banana_impl1()
+{
     const object* obj = try_produce_banana();
-    if (!obj) {
+    if (!obj)
+    {
         throw std::bad_cast();
     }
 
@@ -28,21 +34,24 @@ void try_eat_banana_impl1() {
 }
 
 #include <boost/cast.hpp>
-void try_eat_banana_impl2() {
+void try_eat_banana_impl2()
+{
     const object* obj = try_produce_banana();
     boost::polymorphic_cast<const banana*>(obj)->eat();
 }
 
-
-
-object* try_produce_banana() {
+object* try_produce_banana()
+{
     static penguin peng;
     static banana banan;
     static int i = 0;
-    ++ i;
-    if (i == 3 || i == 6) {
+    ++i;
+    if (i == 3 || i == 6)
+    {
         return 0;
-    } else if (i == 2 || i == 5) {
+    }
+    else if (i == 2 || i == 5)
+    {
         return &peng;
     }
     return &banan;
@@ -51,13 +60,37 @@ object* try_produce_banana() {
 #include <iostream>
 using namespace std;
 
-int main() {
+int main()
+{
     try_eat_banana_impl1();
-    try { try_eat_banana_impl1(); assert(false); } catch(...){}
-    try { try_eat_banana_impl1(); assert(false); } catch(...){}
+    try
+    {
+        try_eat_banana_impl1();
+        assert(false);
+    }
+    catch (...)
+    {}
+    try
+    {
+        try_eat_banana_impl1();
+        assert(false);
+    }
+    catch (...)
+    {}
 
     try_eat_banana_impl2();
-    try { try_eat_banana_impl2(); assert(false); } catch(...){}
-    try { try_eat_banana_impl2(); assert(false); } catch(...){}
+    try
+    {
+        try_eat_banana_impl2();
+        assert(false);
+    }
+    catch (...)
+    {}
+    try
+    {
+        try_eat_banana_impl2();
+        assert(false);
+    }
+    catch (...)
+    {}
 }
-

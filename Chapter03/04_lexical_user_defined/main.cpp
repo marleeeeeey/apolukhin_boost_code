@@ -2,22 +2,17 @@
 #include <stdexcept>
 
 // Negative number that does not store minus sign.
-class negative_number {
+class negative_number
+{
     unsigned short number_;
-
 public:
-    explicit negative_number(unsigned short number = 0)
-        : number_(number)
-    {}
+    explicit negative_number(unsigned short number = 0) : number_(number) {}
 
     // ...
-    unsigned short value_without_sign() const {
-        return number_;
-    }
+    unsigned short value_without_sign() const { return number_; }
 };
 
-inline std::ostream&
-    operator<<(std::ostream& os, const negative_number& num)
+inline std::ostream& operator<<(std::ostream& os, const negative_number& num)
 {
     os << '-' << num.value_without_sign();
     return os;
@@ -27,10 +22,9 @@ inline std::istream& operator>>(std::istream& is, negative_number& num)
 {
     char ch;
     is >> ch;
-    if (ch != '-') {
-        throw std::logic_error(
-            "negative_number class stores ONLY negative values"
-        );
+    if (ch != '-')
+    {
+        throw std::logic_error("negative_number class stores ONLY negative values");
     }
 
     unsigned short s;
@@ -39,14 +33,13 @@ inline std::istream& operator>>(std::istream& is, negative_number& num)
     return is;
 }
 
-
-#include <boost/lexical_cast.hpp>
 #include <boost/array.hpp>
+#include <boost/lexical_cast.hpp>
 #include <cassert>
 
-void example1() {
-    const negative_number n
-        = boost::lexical_cast<negative_number>("-100");
+void example1()
+{
+    const negative_number n = boost::lexical_cast<negative_number>("-100");
     assert(n.value_without_sign() == 100);
 
     const int i = boost::lexical_cast<int>(n);
@@ -61,25 +54,21 @@ void example1() {
     assert(arr[4] == 0);
 }
 
-
 template <class CharT>
-std::basic_ostream<CharT>&
-    operator<<(std::basic_ostream<CharT>& os, const negative_number& num)
+std::basic_ostream<CharT>& operator<<(std::basic_ostream<CharT>& os, const negative_number& num)
 {
     os << static_cast<CharT>('-') << num.value_without_sign();
     return os;
 }
 
 template <class CharT>
-std::basic_istream<CharT>&
-    operator>>(std::basic_istream<CharT>& is, negative_number& num)
+std::basic_istream<CharT>& operator>>(std::basic_istream<CharT>& is, negative_number& num)
 {
     CharT ch;
     is >> ch;
-    if (ch != static_cast<CharT>('-')) {
-        throw std::logic_error(
-            "negative_number class stores ONLY negative values"
-        );
+    if (ch != static_cast<CharT>('-'))
+    {
+        throw std::logic_error("negative_number class stores ONLY negative values");
     }
     unsigned short s;
     is >> s;
@@ -87,7 +76,8 @@ std::basic_istream<CharT>&
     return is;
 }
 
-void example2() {
+void example2()
+{
     const negative_number n = boost::lexical_cast<negative_number>(L"-1");
     assert(n.value_without_sign() == 1);
 
@@ -98,8 +88,8 @@ void example2() {
     assert(arr[2] == 0);
 }
 
-
-int main() {
+int main()
+{
     example1();
     example2();
 }
